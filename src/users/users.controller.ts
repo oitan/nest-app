@@ -8,6 +8,7 @@ import {
   Delete,
   ParseIntPipe,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -27,7 +28,9 @@ export class UsersController {
     try {
       return this.usersService.create(createUserDto);
     } catch (error) {
-      handleEndpointErrors(this.logger, error, []);
+      handleEndpointErrors(this.logger, error, [
+        { errorTypes: [Error], toThrow: NotFoundException },
+      ]);
     }
   }
 
