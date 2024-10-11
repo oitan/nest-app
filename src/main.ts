@@ -3,9 +3,17 @@ import { AppModule } from './app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SwaggerTheme, SwaggerThemeNameEnum } from 'swagger-themes';
+import { Logger } from 'nestjs-pino';
+import { Environment } from './config/environment.enum';
+import { AppConfigService } from './config/app-config.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+  app.useLogger(app.get(Logger));
+
+  const appConfigService = app.get(AppConfigService);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -13,12 +21,16 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       forbidUnknownValues: true,
       transform: true,
+      validateCustomDecorators: true,
     }),
   );
 
-  bootstrapDocumentation(app);
+  const env = appConfigService.get('api.env');
+  if (env === Environment.DEVELOPMENT) {
+    bootstrapDocumentation(app);
+  }
 
-  await app.listen(3000);
+  await app.listen(appConfigService.get('api.port'));
 }
 
 function bootstrapDocumentation(app: INestApplication) {
