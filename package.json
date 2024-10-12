@@ -20,7 +20,16 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "knip": "knip"
+    "knip": "knip",
+    "typeorm": "dotenv -e .env -- ts-node ./node_modules/typeorm/cli-ts-node-esm.js",
+    "seed:new": "sh -c 'npm run typeorm migration:create ./src/db/seeds/$0'",
+    "postseed:new": "prettier --write \"src/db/seeds/*.ts\"",
+    "seed:run": "npm run typeorm migration:run -- -d ./src/db/seeds-data-source.ts",
+    "seed:revert": "npm run typeorm migration:revert -- -d ./src/db/seeds-data-source.ts",
+    "migration:generate": "sh -c 'npm run typeorm migration:generate -- -d ./src/db/migrations-data-source.ts ./src/db/migrations/$0'",
+    "postmigration:generate": "prettier --write \"src/db/migrations/*.ts\"",
+    "migration:run": "npm run typeorm migration:run -- -d ./src/db/migrations-data-source.ts",
+    "migration:revert": "npm run typeorm migration:revert -- -d ./src/db/migrations-data-source.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.4",
@@ -33,12 +42,14 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "nestjs-pino": "^4.1.0",
+    "pg": "^8.13.0",
     "pino": "^9.4.0",
     "pino-http": "^10.3.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "swagger-themes": "^1.4.3",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "typeorm-naming-strategies": "^4.1.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.5",
@@ -50,6 +61,7 @@
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@typescript-eslint/parser": "^8.8.0",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",

@@ -8,13 +8,15 @@ import {
   Delete,
   ParseIntPipe,
   Logger,
-  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { handleEndpointErrors } from 'src/core/endpoint-error-handler';
+import { CreateUserResponse } from './response/create-user.response';
+import { UserAlreadyExistsError } from 'src/core/errors';
 
 @ApiTags('users')
 @Controller('users')
@@ -24,12 +26,15 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  async create(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<CreateUserResponse> {
     try {
-      return this.usersService.create(createUserDto);
+      const user = await this.usersService.create(createUserDto);
+      return new CreateUserResponse(user);
     } catch (error) {
-      handleEndpointErrors(this.logger, error, [
-        { errorTypes: [Error], toThrow: NotFoundException },
+      return handleEndpointErrors<CreateUserResponse>(this.logger, error, [
+        { errorTypes: [UserAlreadyExistsError], toThrow: BadRequestException },
       ]);
     }
   }

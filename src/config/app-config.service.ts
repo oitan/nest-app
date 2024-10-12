@@ -8,6 +8,10 @@ export class AppConfigService extends ConfigService<Configuration, true> {
     return super.get(propertyPath, { infer: true });
   }
 
+  get env() {
+    return this.get('env');
+  }
+
   get api() {
     return this.get('api');
   }

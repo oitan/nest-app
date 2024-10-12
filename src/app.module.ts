@@ -7,6 +7,8 @@ import { getLoggerConfig } from './core/logger.config';
 import { CorrelationIdMiddleware } from './core/correlation-id.middleware';
 import { AppConfigModule } from './config/app-config.module';
 import { AppConfigService } from './config/app-config.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DbLoggerService } from './db/db-logger.service';
 
 @Module({
   imports: [
@@ -14,6 +16,14 @@ import { AppConfigService } from './config/app-config.service';
     LoggerModule.forRootAsync({
       useFactory: getLoggerConfig,
       inject: [AppConfigService],
+    }),
+    TypeOrmModule.forRootAsync({
+      useFactory: async (
+        appConfigService: AppConfigService,
+        logger: DbLoggerService,
+      ) => ({ ...appConfigService.db, logger }),
+      extraProviders: [DbLoggerService],
+      inject: [AppConfigService, DbLoggerService],
     }),
     UsersModule,
   ],

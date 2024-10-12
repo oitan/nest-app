@@ -16,6 +16,10 @@ This setup comes with:
 - environment variables validation
 - Configuration service with intellisense
 - TypeOrm
+  - migrations
+  - seeds
+  - logging
+  - base entity
 - Postgres container with docker compose
 - EsLint
 - Prettier
@@ -33,8 +37,18 @@ This setup comes with:
 
 ## Project setup
 
+Install
+
 ```bash
 $ npm install
+$ docker compose -f compose.dev.yaml up -d
+```
+
+Run migrations and seeds
+
+```bash
+$ npm run migration:run
+$ npm run seed:run
 ```
 
 ## Compile and run the project
@@ -61,6 +75,28 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+## DB commands
+
+```bash
+# creates a new empty seed
+$ npm run seed:new <name of the new seed>
+
+# runs all seeds that are down
+$ npm run seed:run
+
+# reverts the latest run seed
+$ npm run seed:revert
+
+# generates a new migration
+$ npm run migration:generate <name of the new migration>
+
+# runs all migrations that are down
+$ npm run migration:run
+
+# reverts the latest run migration
+$ npm run migration:revert
 ```
 
 ## License

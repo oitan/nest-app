@@ -30,12 +30,12 @@ async function bootstrap() {
     }),
   );
 
-  const env = appConfigService.get('api.env');
+  const env = appConfigService.env;
   if (env === Environment.DEVELOPMENT) {
     bootstrapDocumentation(app);
   }
 
-  await app.listen(appConfigService.get('api.port'));
+  await app.listen(appConfigService.api.port);
 }
 
 function bootstrapDocumentation(app: INestApplication) {
@@ -56,4 +56,4 @@ function bootstrapDocumentation(app: INestApplication) {
   });
 }
 
-bootstrap();
+bootstrap().catch(console.error);

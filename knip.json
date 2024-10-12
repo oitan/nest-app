@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/main.ts",
+    "src/repl.ts",
+    "test/app.e2e-spec.ts",
+    "src/db/migrations-data-source.ts",
+    "src/db/seeds-data-source.ts",
+    "src/db/migrations/*.ts"
+  ],
+  "ignore": [],
+  "ignoreBinaries": [],
+  "ignoreDependencies": [],
+  "ignoreMembers": ["TEST"]
+}

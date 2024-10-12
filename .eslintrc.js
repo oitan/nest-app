@@ -31,5 +31,6 @@ module.exports = {
       },
     ],
     curly: 'error',
+    '@typescript-eslint/no-floating-promises': ['error'],
   },
 };

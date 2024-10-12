@@ -10,10 +10,7 @@ import { AppConfigService } from 'src/config/app-config.service';
 export function getLoggerConfig(appConfigService: AppConfigService): Params {
   const pinoHttp = {
     genReqId: (req) => req.headers[XCorrelationIdHeader] || randomUUID(),
-    level:
-      appConfigService.get('api.env') === Environment.PRODUCTION
-        ? 'info'
-        : 'debug',
+    level: appConfigService.env === Environment.PRODUCTION ? 'info' : 'debug',
     formatters: {
       level: (label) => ({ lvl: label.toUpperCase() }),
     },

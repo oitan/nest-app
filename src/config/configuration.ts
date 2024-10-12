@@ -6,8 +6,8 @@ export function getConfiguration(): Configuration {
   const env = validateEnvironmentVariables(process.env);
 
   return {
+    env: env.NODE_ENV,
     api: {
-      env: env.NODE_ENV,
       port: env.PORT,
       jwtSecret: env.JWT_SECRET,
       jwtExpiresIn: env.JWT_EXPIRES_IN,

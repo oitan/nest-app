@@ -4,7 +4,7 @@ import {
   Logger,
 } from '@nestjs/common';
 
-export function handleEndpointErrors(
+export function handleEndpointErrors<T>(
   logger: Logger,
   error: any,
   errorMap: {
@@ -12,7 +12,7 @@ export function handleEndpointErrors(
     toThrow: new (message: string) => HttpException;
   }[],
   defaultThrow?: new (message: string) => HttpException,
-) {
+): T {
   logger.error(error);
 
   if (error instanceof HttpException) {
