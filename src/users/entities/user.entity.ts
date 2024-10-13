@@ -3,7 +3,7 @@ import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class User extends AppBaseEntity {
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', length: 255 })
   email: string;
 
   @Column({ type: 'varchar', length: 255 })
@@ -15,6 +15,6 @@ export class User extends AppBaseEntity {
   @Column({ type: 'date' })
   birthday: Date;
 
-  @Column({ type: 'varchar', length: 15, unique: true })
+  @Column({ type: 'varchar', length: 15 })
   mobilePhone: string;
 }

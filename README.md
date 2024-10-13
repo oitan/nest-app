@@ -21,7 +21,7 @@ This setup comes with:
   - logging
   - base entity
 - Postgres container with docker compose
-- EsLint
+- ESLint
 - Prettier
 - Swagger and OpenAPI documentation (with dracula theme)
   - `ApiProperty` decorator is not required to see DTO parameters in documentation. But here they are added to have randomized examples. JSDoc @description and @example can be used to show them in documentation as well

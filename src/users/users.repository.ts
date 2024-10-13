@@ -1,7 +1,7 @@
 import { DataSource, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Injectable } from '@nestjs/common';
-import { UserAlreadyExistsError } from 'src/core/errors';
+import { UserAlreadyExistsError, UserNotFoundError } from 'src/core/errors';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -17,11 +17,19 @@ export class UsersRepository extends Repository<User> {
     mobilePhone: string;
   }): Promise<void> {
     const exists = await this.existsBy([{ email }, { mobilePhone }]);
+    console.log(exists);
 
     if (exists) {
       throw new UserAlreadyExistsError(
         `User with ${email} email or ${mobilePhone} mobile phone already exists`,
       );
+    }
+  }
+
+  async validateDoesExist(id: number): Promise<void> {
+    const doesExist = await this.existsBy({ id });
+    if (!doesExist) {
+      throw new UserNotFoundError(`User with ID ${id} does not exist`);
     }
   }
 }

@@ -9,14 +9,19 @@ import {
   ParseIntPipe,
   Logger,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { handleEndpointErrors } from 'src/core/endpoint-error-handler';
-import { CreateUserResponse } from './response/create-user.response';
-import { UserAlreadyExistsError } from 'src/core/errors';
+import { UserAlreadyExistsError, UserNotFoundError } from 'src/core/errors';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import {
+  CreateUserResponse,
+  FindAllUsersResponse,
+  FindOneUserResponse,
+  UpdateUserResponse,
+} from './response';
 
 @ApiTags('users')
 @Controller('users')
@@ -33,48 +38,61 @@ export class UsersController {
       const user = await this.usersService.create(createUserDto);
       return new CreateUserResponse(user);
     } catch (error) {
-      return handleEndpointErrors<CreateUserResponse>(this.logger, error, [
+      return handleEndpointErrors(this.logger, error, [
         { errorTypes: [UserAlreadyExistsError], toThrow: BadRequestException },
       ]);
     }
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<FindAllUsersResponse> {
     try {
-      return this.usersService.findAll();
+      const users = await this.usersService.findAll();
+      return new FindAllUsersResponse(users);
     } catch (error) {
-      handleEndpointErrors(this.logger, error, []);
+      return handleEndpointErrors(this.logger, error, [
+        { errorTypes: [UserAlreadyExistsError], toThrow: BadRequestException },
+      ]);
     }
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<FindOneUserResponse> {
     try {
-      return this.usersService.findOne(id);
+      const user = await this.usersService.findOne(id);
+      return new FindOneUserResponse(user);
     } catch (error) {
-      handleEndpointErrors(this.logger, error, []);
+      return handleEndpointErrors(this.logger, error, [
+        { errorTypes: [UserNotFoundError], toThrow: NotFoundException },
+      ]);
     }
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
-  ) {
+  ): Promise<UpdateUserResponse> {
     try {
-      return this.usersService.update(id, updateUserDto);
+      const user = await this.usersService.update(id, updateUserDto);
+      return new UpdateUserResponse(user);
     } catch (error) {
-      handleEndpointErrors(this.logger, error, []);
+      return handleEndpointErrors(this.logger, error, [
+        { errorTypes: [UserNotFoundError], toThrow: NotFoundException },
+      ]);
     }
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
     try {
-      return this.usersService.remove(id);
+      await this.usersService.remove(id);
     } catch (error) {
-      handleEndpointErrors(this.logger, error, []);
+      handleEndpointErrors(this.logger, error, [
+        { errorTypes: [UserNotFoundError], toThrow: NotFoundException },
+      ]);
     }
   }
 }

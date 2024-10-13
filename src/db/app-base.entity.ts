@@ -3,11 +3,12 @@ import {
   Column,
   UpdateDateColumn,
   CreateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 
 export abstract class AppBaseEntity {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
@@ -19,16 +20,22 @@ export abstract class AppBaseEntity {
   isSeeded: boolean;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  createDateTime: Date;
+  createdAt: Date;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
   createdBy: string;
 
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  lastChangedDateTime: Date;
+  updatedAt: Date;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
-  lastChangedBy: string;
+  updatedBy: string;
+
+  @DeleteDateColumn({ type: 'timestamptz' })
+  deletedAt: Date;
+
+  @Column({ type: 'varchar', length: 300, nullable: true })
+  deletedBy: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
   internalComment: string | null;

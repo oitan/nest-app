@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 import { User } from './entities/user.entity';
+import { UserNotFoundError } from 'src/core/errors';
 
 @Injectable()
 export class UsersService {
@@ -15,19 +16,28 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  findAll(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user) {
+      throw new UserNotFoundError(`User with ID ${id} does not exist`);
+    }
+    return user;
   }
 
-  update(id: number, _updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    await this.usersRepository.validateDoesExist(id);
+    return this.usersRepository.save({
+      ...updateUserDto,
+      id,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<void> {
+    await this.usersRepository.validateDoesExist(id);
+    await this.usersRepository.softRemove({ id });
   }
 }
