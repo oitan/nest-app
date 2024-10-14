@@ -30,7 +30,7 @@ module.exports = {
         destructuredArrayIgnorePattern: '^_',
       },
     ],
-    curly: 'error',
+    'curly': 'error',
     '@typescript-eslint/no-floating-promises': ['error'],
     'no-return-await': 'off',
     '@typescript-eslint/return-await': 'error',

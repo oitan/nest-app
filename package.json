@@ -1,13 +1,17 @@
 {
   "name": "nest-app",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Strongly opinionated setup for NestJS applications.",
+  "author": "Alikhan Oitan",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
+    "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oitan/nest-app.git"
+  },
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"*.{md,yaml,yml,js,json}\" \"!package.json\" \"!package-lock.json\"",
     "start": "nest start",
     "repl": "npm run start -- --entryFile repl",
     "repl:dev": "npm run start -- --watch --entryFile repl",
