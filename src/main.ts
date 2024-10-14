@@ -6,6 +6,7 @@ import { SwaggerTheme, SwaggerThemeNameEnum } from 'swagger-themes';
 import { Logger } from 'nestjs-pino';
 import { Environment } from './config/environment.enum';
 import { AppConfigService } from './config/app-config.service';
+import { JwtGuard } from './auth/jwt.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -40,6 +41,10 @@ function bootstrapDocumentation(app: INestApplication) {
     .setTitle('Nest App')
     .setDescription('Nest App API')
     .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      JwtGuard.name,
+    )
     .addTag('app')
     .build();
   const document = SwaggerModule.createDocument(app, config);

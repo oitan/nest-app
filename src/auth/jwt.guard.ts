@@ -12,8 +12,8 @@ import { AppConfigService } from 'src/config/app-config.service';
 import { AUTHORIZATION_HEADER } from 'src/core/headers.const';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  private readonly logger = new Logger(AuthGuard.name);
+export class JwtGuard implements CanActivate {
+  private readonly logger = new Logger(JwtGuard.name);
 
   constructor(
     private readonly jwtService: JwtService,
@@ -42,6 +42,7 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractToken(req: Request): string | undefined {
+    console.log(req.headers);
     const [type, token] = req.headers[AUTHORIZATION_HEADER]?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }

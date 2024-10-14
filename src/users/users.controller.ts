@@ -12,12 +12,12 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { handleEndpointErrors } from 'src/core/endpoint-error-handler';
 import { UserNotFoundError } from 'src/core/errors';
 import { UpdateUserDto } from './dto';
 import { UpdateUserResponse } from './response';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { JwtGuard } from 'src/auth/jwt.guard';
 import { Request } from 'express';
 
 @ApiTags('users')
@@ -27,7 +27,8 @@ export class UsersController {
 
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(AuthGuard)
+  @ApiBearerAuth(JwtGuard.name)
+  @UseGuards(JwtGuard)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,

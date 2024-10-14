@@ -19,9 +19,9 @@ import {
   UserNotFoundError,
 } from 'src/core/errors';
 import { handleEndpointErrors } from 'src/core/endpoint-error-handler';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
-import { AuthGuard } from './auth.guard';
+import { JwtGuard } from './jwt.guard';
 import { WrongCredentialsError } from 'src/core/errors/wrong-credentials.error';
 
 @ApiTags('auth')
@@ -61,7 +61,8 @@ export class AuthController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @ApiBearerAuth(JwtGuard.name)
+  @UseGuards(JwtGuard)
   @Get()
   async getAuth(@Req() req: Request) {
     try {
