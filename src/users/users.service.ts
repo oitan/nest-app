@@ -1,18 +1,36 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 import { User } from './entities/user.entity';
 import { UserNotFoundError } from 'src/core/errors';
+import { SignUpDto } from 'src/auth/dto';
 
 @Injectable()
 export class UsersService {
   private readonly _logger = new Logger(UsersService.name);
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    await this.usersRepository.validateIsUnique(createUserDto);
-    const user = this.usersRepository.create(createUserDto);
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ email });
+    if (!user) {
+      throw new UserNotFoundError('No user found with such an email');
+    }
+    return user;
+  }
+
+  async findByMobilePhone(mobilePhone: string): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ mobilePhone });
+    if (!user) {
+      throw new UserNotFoundError('No user found with such a mobile phone');
+    }
+    return user;
+  }
+
+  async create(
+    signUpDto: SignUpDto & { passwordSalt: string; hashedPassword: string },
+  ): Promise<User> {
+    await this.usersRepository.validateIsUnique(signUpDto);
+    const user = this.usersRepository.create(signUpDto);
     return this.usersRepository.save(user);
   }
 

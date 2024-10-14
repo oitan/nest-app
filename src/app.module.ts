@@ -9,6 +9,8 @@ import { AppConfigModule } from './config/app-config.module';
 import { AppConfigService } from './config/app-config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DbLoggerService } from './db/db-logger.service';
+import { AuthModule } from './auth/auth.module';
+import { AppJwtModule } from './auth/app-jwt.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { DbLoggerService } from './db/db-logger.service';
       extraProviders: [DbLoggerService],
       inject: [AppConfigService, DbLoggerService],
     }),
+    AppJwtModule,
+    AuthModule,
     UsersModule,
   ],
   controllers: [AppController],

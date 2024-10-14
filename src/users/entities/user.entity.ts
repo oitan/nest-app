@@ -7,7 +7,10 @@ export class User extends AppBaseEntity {
   email: string;
 
   @Column({ type: 'varchar', length: 255 })
-  password: string;
+  hashedPassword: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  passwordSalt: string;
 
   @Column({ type: 'varchar', length: 255 })
   fullName: string;

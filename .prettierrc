@@ -6,5 +6,5 @@
   "tabWidth": 2,
   "printWidth": 80,
   "semi": true,
-  "quoteProps": "consistent",
+  "quoteProps": "consistent"
 }

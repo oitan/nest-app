@@ -1,4 +1,4 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -6,8 +6,6 @@ import { SwaggerTheme, SwaggerThemeNameEnum } from 'swagger-themes';
 import { Logger } from 'nestjs-pino';
 import { Environment } from './config/environment.enum';
 import { AppConfigService } from './config/app-config.service';
-import { HttpExceptionsFilter } from './core/http-exceptions.filter';
-import { ExpressAdapter } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -16,9 +14,6 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
 
   const appConfigService = app.get(AppConfigService);
-
-  const httpAdapterHost = app.get(HttpAdapterHost<ExpressAdapter>);
-  app.useGlobalFilters(new HttpExceptionsFilter(httpAdapterHost));
 
   app.useGlobalPipes(
     new ValidationPipe({

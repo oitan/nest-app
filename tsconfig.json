@@ -17,10 +17,11 @@
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
+    "strictPropertyInitialization": false,
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "typeRoots": ["types", "node_modules/@types", "node_modules/**/@types"]
+    "typeRoots": ["node_modules/@types", "node_modules/**/@types", "types"]
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]

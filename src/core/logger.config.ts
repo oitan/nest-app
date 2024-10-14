@@ -1,15 +1,15 @@
 import { randomUUID } from 'crypto';
-import { Request, Response } from 'express';
-import { Options } from 'pino-http';
+import type { Request, Response } from 'express';
+import type { Options } from 'pino-http';
 import { Environment } from 'src/config/environment.enum';
 import { stdTimeFunctions } from 'pino';
-import { Params } from 'nestjs-pino';
-import { XCorrelationIdHeader } from './headers.const';
+import { X_CORRELATION_ID_HEADER } from './headers.const';
 import { AppConfigService } from 'src/config/app-config.service';
+import type { Params } from 'nestjs-pino';
 
 export function getLoggerConfig(appConfigService: AppConfigService): Params {
-  const pinoHttp = {
-    genReqId: (req) => req.headers[XCorrelationIdHeader] || randomUUID(),
+  const pinoHttp: Options<Request, Response> = {
+    genReqId: (req) => req.headers[X_CORRELATION_ID_HEADER] || randomUUID(),
     level: appConfigService.env === Environment.PRODUCTION ? 'info' : 'debug',
     formatters: {
       level: (label) => ({ lvl: label.toUpperCase() }),
@@ -20,7 +20,7 @@ export function getLoggerConfig(appConfigService: AppConfigService): Params {
     base: undefined,
     timestamp: stdTimeFunctions.isoTime,
     nestedKey: 'payload',
-    customReceivedObject: (req, _res, _val) => ({
+    customReceivedObject: (req: Request, _res, _val) => ({
       url: req.url,
       method: req.method,
       query: req.query,
@@ -28,6 +28,6 @@ export function getLoggerConfig(appConfigService: AppConfigService): Params {
       body: req.body,
     }),
     customReceivedMessage: (_req, _res) => 'new API request',
-  } as Options<Request, Response>;
-  return { pinoHttp };
+  };
+  return { pinoHttp: pinoHttp as unknown as Options };
 }

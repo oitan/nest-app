@@ -17,7 +17,7 @@ import {
   MaxDate,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class SignUpDto {
   @ApiProperty({ example: randEmail() })
   @IsEmail()
   email: string;
