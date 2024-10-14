@@ -5,8 +5,8 @@ import { UserAlreadyExistsError, UserNotFoundError } from 'src/core/errors';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
-  constructor(private dataSource: DataSource) {
-    super(User, dataSource.createEntityManager());
+  constructor(private readonly _dataSource: DataSource) {
+    super(User, _dataSource.createEntityManager());
   }
 
   async validateIsUnique({
@@ -17,7 +17,6 @@ export class UsersRepository extends Repository<User> {
     mobilePhone: string;
   }): Promise<void> {
     const exists = await this.existsBy([{ email }, { mobilePhone }]);
-    console.log(exists);
 
     if (exists) {
       throw new UserAlreadyExistsError(
