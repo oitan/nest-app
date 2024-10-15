@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"*.{md,yaml,yml,js,json}\" \"!package-lock.json\"",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"*.{md,yaml,yml,js,json}\"",
     "start": "nest start",
     "repl": "npm run start -- --entryFile repl",
     "repl:dev": "npm run start -- --watch --entryFile repl",
